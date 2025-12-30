@@ -119,7 +119,7 @@ const ActivityItem = ({ data }: { data: ActivityItemData }) => {
   return (
     <div
       // Added 'border' and '${colors.border}' to classes
-      className={`flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 md:p-5 rounded-3xl ${colors.bg} border ${colors.border} transition-all hover:shadow-sm`}
+      className={`w-full flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 md:p-5 rounded-3xl ${colors.bg} border ${colors.border} transition-all hover:shadow-sm`}
     >
       <Image
         src={data.icon}

@@ -1,13 +1,13 @@
-import DashboardLayout from "@/app/components/DashboardLayout";
-import DashboardStats from "@/app/components/DashboardStats";
+import DashboardLayout from "@/app/components/app/dashboard/DashboardLayout";
+import DashboardStats from "@/app/components/app/dashboard/DashboardStats";
 import {
   EngagementChart,
   PlaybookChart,
-} from "@/app/components/DashboardCharts";
-import ActivityStream from "./components/ActivityStream";
-import AIInsightsPanel from "./components/AIInsightsPanel";
-import RecentActivityCard from "./components/RecentActivityCard";
-import MonthlyUsage from "./components/MonthlyUsage";
+} from "@/app/components/app/dashboard/DashboardCharts";
+import ActivityStream from "./components/app/dashboard/ActivityStream";
+import AIInsightsPanel from "./components/app/dashboard/AIInsightsPanel";
+import RecentActivityCard from "./components/app/dashboard/RecentActivityCard";
+import MonthlyUsage from "./components/app/dashboard/MonthlyUsage";
 
 export default function Home() {
   return (

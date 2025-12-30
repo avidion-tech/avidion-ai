@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react"; // Added hooks
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation"; // 1. Import usePathname
 import { X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion"; // Added for animation
+import { motion, AnimatePresence } from "framer-motion";
 
 // Importing icons
 import { RiTelegram2Fill } from "react-icons/ri";
@@ -19,7 +20,6 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-// 1. Define your status messages here
 const STATUS_MESSAGES = [
   "Drafting emails...",
   "Syncing contacts...",
@@ -28,25 +28,25 @@ const STATUS_MESSAGES = [
 ];
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
-  // 2. State for the current text index
   const [statusIndex, setStatusIndex] = useState(0);
+  const pathname = usePathname(); // 2. Get current URL path
 
-  // 3. Cycle through the messages every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setStatusIndex((prev) => (prev + 1) % STATUS_MESSAGES.length);
-    }, 3000); // Change speed here (3000ms = 3s)
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
 
+  // 3. Updated menu items with real paths
   const menuItems = [
-    { name: "Dashboard", icon: CgMicrosoft, active: true },
-    { name: "Inbox", icon: BiSolidInbox, active: false },
-    { name: "Drafts", icon: MdDrafts, active: false },
-    { name: "Campaigns", icon: RiTelegram2Fill, active: false },
-    { name: "Playbooks", icon: HiMiniBookOpen, active: false },
-    { name: "Settings", icon: IoMdSettings, active: false },
+    { name: "Dashboard", href: "/dashboard", icon: CgMicrosoft },
+    { name: "Inbox", href: "/inbox", icon: BiSolidInbox },
+    { name: "Drafts", href: "/drafts", icon: MdDrafts },
+    { name: "Campaigns", href: "/campaigns", icon: RiTelegram2Fill },
+    { name: "Playbooks", href: "/playbooks", icon: HiMiniBookOpen },
+    { name: "Settings", href: "/settings", icon: IoMdSettings },
   ];
 
   return (
@@ -101,31 +101,37 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
         {/* Navigation Menu */}
         <nav className="space-y-2 flex-1">
-          {menuItems.map((item) => (
-            <Link
-              href="#"
-              key={item.name}
-              className={`relative flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all font-medium ${
-                item.active
-                  ? "bg-white text-blue-700 shadow-md translate-x-1 " +
-                    "before:absolute before:-left-2 before:top-1/2 before:-translate-y-1/2 before:w-0.5 before:h-12 before:bg-white before:rounded-full before:content-['']"
-                  : "text-blue-50 hover:bg-white/10 hover:translate-x-1"
-              }`}
-            >
-              <item.icon
-                size={18}
-                className={item.active ? "text-blue-600" : "text-blue-100"}
-              />
-              <span>{item.name}</span>
-            </Link>
-          ))}
+          {menuItems.map((item) => {
+            // 4. Dynamic Active Logic
+            const isActive =
+              pathname === item.href || pathname.startsWith(`${item.href}/`);
+
+            return (
+              <Link
+                href={item.href}
+                key={item.name}
+                className={`relative flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all font-medium ${
+                  isActive
+                    ? "bg-white text-blue-700 shadow-md translate-x-1 " +
+                      "before:absolute before:-left-2 before:top-1/2 before:-translate-y-1/2 before:w-0.5 before:h-12 before:bg-white before:rounded-full before:content-['']"
+                    : "text-blue-50 hover:bg-white/10 hover:translate-x-1"
+                }`}
+              >
+                <item.icon
+                  size={18}
+                  className={isActive ? "text-blue-600" : "text-blue-100"}
+                />
+                <span>{item.name}</span>
+              </Link>
+            );
+          })}
         </nav>
 
         {/* User Profile Footer */}
         <div className="flex items-center gap-3 px-2 pt-6 mt-auto">
           <div className="relative h-10 w-10 rounded-full overflow-hidden border-2 border-white/20 shrink-0">
             <Image
-              src="/sidebaricons/user-avatar.png"
+              src="https://randomuser.me/api/portraits/women/68.jpg"
               alt="AIVA"
               width={40}
               height={40}
@@ -135,14 +141,14 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="overflow-hidden flex flex-col justify-center w-full">
             <p className="text-sm font-bold truncate">AIVA</p>
 
-            {/* 4. The Animated Scrolling Text */}
+            {/* The Animated Scrolling Text */}
             <div className="h-4 relative w-full overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.p
-                  key={statusIndex} // key change triggers animation
-                  initial={{ y: 20, opacity: 0 }} // Start below
-                  animate={{ y: 0, opacity: 1 }} // Move to center
-                  exit={{ y: -20, opacity: 0 }} // Exit to top
+                  key={statusIndex}
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -20, opacity: 0 }}
                   transition={{ duration: 0.5, ease: "easeInOut" }}
                   className="text-xs text-blue-200 truncate opacity-80 absolute w-full"
                 >
