@@ -3,7 +3,7 @@
 import Image from "next/image";
 import React from "react";
 
-export default function AIBanner() {
+export default function DraftAIBanner() {
   return (
     <div className="bg-blue-100 border border-blue-200 rounded-2xl p-4 flex items-center gap-4 shadow-sm mt-8">
       <div className="relative shrink-0">
@@ -18,10 +18,12 @@ export default function AIBanner() {
       </div>
       <div>
         <h3 className="text-slate-800 font-medium text-sm md:text-base">
-          I&apos;m tracking replies and detecting intent automatically.
+          I&apos;ve prepared personalized email drafts based on your playbook.
+          Review & approve to start sending.
         </h3>
         <p className="text-slate-500 text-xs md:text-sm mt-0.5">
-          4 positive replies, 2 neutral, 1 negative
+          Some drafts didn&apos;t pass quality checks. I tagged them for your
+          review.
         </p>
       </div>
     </div>

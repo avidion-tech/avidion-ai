@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { Filter, Menu } from "lucide-react";
 import { GoBellFill } from "react-icons/go";
-import { AdvancedFiltersModal } from "./AdvancedFiltersModal";
+// import { AdvancedFiltersModal } from "./AdvancedFiltersModal";
 import { IoMdRefresh } from "react-icons/io";
 
 interface HeaderProps {
   onMenuClick: () => void;
 }
 
-export default function InboxHeader({ onMenuClick }: HeaderProps) {
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+export default function DraftHeader({ onMenuClick }: HeaderProps) {
+  //   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   return (
     <>
@@ -26,10 +26,10 @@ export default function InboxHeader({ onMenuClick }: HeaderProps) {
             </button>
             <div>
               <h1 className="text-xl md:text-3xl font-bold text-gray-900 flex items-center gap-2">
-                Inbox
+                Drafts
               </h1>
               <p className="text-xs md:text-lg text-gray-500 mt-1">
-                Manage inbound replies with AI classification.
+                Review and Approve AI-generated email drafts.
               </p>
             </div>
           </div>
@@ -50,18 +50,18 @@ export default function InboxHeader({ onMenuClick }: HeaderProps) {
             Refresh
           </button>
           <button
-            onClick={() => setIsFilterModalOpen(true)}
-            className="flex-1 md:flex-none px-4 py-2.5 md:px-6 md:py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-full text-sm md:text-base font-medium hover:from-blue-600 hover:to-blue-600 shadow-sm transition-all duration-200 flex items-center justify-center gap-2 whitespace-nowrap"
+            // onClick={() => setIsFilterModalOpen(true)}
+            className="flex-1 md:flex-none px-6 py-2.5 md:px-6 md:py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-full text-sm md:text-base font-medium hover:from-blue-600 hover:to-blue-600 shadow-sm transition-all duration-200 flex items-center justify-center gap-2 whitespace-nowrap"
           >
             <Filter size={18} className="text-white/90" />
-            Advanced Filters
+            Generate more
           </button>
         </div>
       </div>
-      <AdvancedFiltersModal
+      {/* <AdvancedFiltersModal
         open={isFilterModalOpen}
         onOpenChange={setIsFilterModalOpen}
-      />
+      /> */}
     </>
   );
 }

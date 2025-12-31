@@ -43,7 +43,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const menuItems = [
     { name: "Dashboard", href: "/dashboard", icon: CgMicrosoft },
     { name: "Inbox", href: "/inbox", icon: BiSolidInbox },
-    { name: "Drafts", href: "/drafts", icon: MdDrafts },
+    { name: "Drafts", href: "/draft", icon: MdDrafts },
     { name: "Campaigns", href: "/campaigns", icon: RiTelegram2Fill },
     { name: "Playbooks", href: "/playbooks", icon: HiMiniBookOpen },
     { name: "Settings", href: "/settings", icon: IoMdSettings },
@@ -104,7 +104,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           {menuItems.map((item) => {
             // 4. Dynamic Active Logic
             const isActive =
-              pathname === item.href || pathname.startsWith(`${item.href}/`);
+              pathname === item.href ||
+              pathname.startsWith(`${item.href}/`) ||
+              (pathname === "/" && item.href === "/dashboard");
 
             return (
               <Link
@@ -131,7 +133,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         <div className="flex items-center gap-3 px-2 pt-6 mt-auto">
           <div className="relative h-10 w-10 rounded-full overflow-hidden border-2 border-white/20 shrink-0">
             <Image
-              src="https://randomuser.me/api/portraits/women/68.jpg"
+              src="/Circle.svg"
               alt="AIVA"
               width={40}
               height={40}

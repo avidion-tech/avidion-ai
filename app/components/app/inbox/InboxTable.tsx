@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { Search } from "lucide-react";
 
 // --- Types & Data ---
@@ -20,6 +20,7 @@ interface EmailItem {
   classification: ClassificationStatus;
   subClassification: string;
   time: string;
+  isRead: boolean; // Added this property
 }
 
 const MOCK_EMAILS: EmailItem[] = [
@@ -33,6 +34,7 @@ const MOCK_EMAILS: EmailItem[] = [
     classification: "Interested",
     subClassification: "Positive - Meeting Intent",
     time: "2 hours ago",
+    isRead: false,
   },
   {
     id: "2",
@@ -44,6 +46,7 @@ const MOCK_EMAILS: EmailItem[] = [
     classification: "Paused",
     subClassification: "Negative - Future Interest",
     time: "5 hours ago",
+    isRead: true,
   },
   {
     id: "3",
@@ -55,6 +58,7 @@ const MOCK_EMAILS: EmailItem[] = [
     classification: "Interested",
     subClassification: "Positive - Info Request",
     time: "1 day ago",
+    isRead: false,
   },
   {
     id: "4",
@@ -65,6 +69,7 @@ const MOCK_EMAILS: EmailItem[] = [
     classification: "Bounce",
     subClassification: "Technical - Hard Bounce",
     time: "2 days ago",
+    isRead: false,
   },
   {
     id: "5",
@@ -76,6 +81,7 @@ const MOCK_EMAILS: EmailItem[] = [
     classification: "Interested",
     subClassification: "Positive - Meeting Request",
     time: "3 hours ago",
+    isRead: false,
   },
   {
     id: "6",
@@ -87,6 +93,7 @@ const MOCK_EMAILS: EmailItem[] = [
     classification: "Auto-reply",
     subClassification: "Neutral - OOO",
     time: "6 hours ago",
+    isRead: true,
   },
   {
     id: "7",
@@ -98,6 +105,7 @@ const MOCK_EMAILS: EmailItem[] = [
     classification: "Interested",
     subClassification: "Positive - Info Request",
     time: "4 hours ago",
+    isRead: true,
   },
   {
     id: "8",
@@ -108,10 +116,9 @@ const MOCK_EMAILS: EmailItem[] = [
     classification: "Not Interested",
     subClassification: "Negative - Using Competitor",
     time: "1 day ago",
+    isRead: true,
   },
 ];
-
-const TABS = ["All (8)", "Unread (4)", "Interested (4)", "Bounces (1)"];
 
 // --- Props ---
 interface InboxTableProps {
@@ -123,6 +130,51 @@ export default function InboxTable({
   activeTab,
   setActiveTab,
 }: InboxTableProps) {
+  // Local state for search
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // 1. Calculate Counts Dynamically
+  const counts = useMemo(() => {
+    return {
+      All: MOCK_EMAILS.length,
+      Unread: MOCK_EMAILS.filter((e) => !e.isRead).length,
+      Interested: MOCK_EMAILS.filter((e) => e.classification === "Interested")
+        .length,
+      Bounces: MOCK_EMAILS.filter((e) => e.classification === "Bounce").length,
+    };
+  }, []);
+
+  // 2. Define Tab Structure with Counts
+  const tabsList = [
+    { key: "All", label: `All (${counts.All})` },
+    { key: "Unread", label: `Unread (${counts.Unread})` },
+    { key: "Interested", label: `Interested (${counts.Interested})` },
+    { key: "Bounces", label: `Bounces (${counts.Bounces})` },
+  ];
+
+  // 3. Filter Emails based on Tab AND Search
+  const filteredEmails = MOCK_EMAILS.filter((email) => {
+    // Tab Filter
+    const matchesTab =
+      activeTab === "All"
+        ? true
+        : activeTab === "Unread"
+        ? !email.isRead
+        : activeTab === "Interested"
+        ? email.classification === "Interested"
+        : activeTab === "Bounces"
+        ? email.classification === "Bounce"
+        : true;
+
+    // Search Filter
+    const matchesSearch =
+      email.contactName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      email.contactCompany.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      email.subject.toLowerCase().includes(searchQuery.toLowerCase());
+
+    return matchesTab && matchesSearch;
+  });
+
   return (
     <div className="bg-slate-50 rounded-3xl shadow-sm border border-slate-100 flex flex-col w-full overflow-hidden">
       {/* Search Bar Section */}
@@ -135,6 +187,8 @@ export default function InboxTable({
           <input
             type="text"
             placeholder="Search by name, company or subject..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-11 pr-4 py-3 bg-gray-200 border-none rounded-3xl text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-slate-200 outline-none transition-all text-sm"
           />
         </div>
@@ -143,17 +197,17 @@ export default function InboxTable({
       {/* Tabs */}
       <div className="px-6 border-b border-slate-100 overflow-x-auto scrollbar-hide">
         <div className="flex gap-12 min-w-max">
-          {TABS.map((tab) => (
+          {tabsList.map((tab) => (
             <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
               className={`pb-4 text-sm font-medium transition-colors border-b-2 ${
-                activeTab === tab
+                activeTab === tab.key
                   ? "border-blue-600 text-slate-900"
                   : "border-transparent text-slate-500 hover:text-slate-700"
               }`}
             >
-              {tab}
+              {tab.label}
             </button>
           ))}
         </div>
@@ -172,57 +226,84 @@ export default function InboxTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {MOCK_EMAILS.map((email) => (
-              <tr
-                key={email.id}
-                className="hover:bg-slate-50/80 transition-colors group"
-              >
-                {/* Contact Column - Changed align-top to align-middle */}
-                <td className="px-6 py-5 align-middle">
-                  <div className="font-bold text-slate-700 text-sm">
-                    {email.contactName}
-                  </div>
-                  <div className="text-xs text-slate-500 mt-1 font-medium">
-                    {email.contactCompany}
-                  </div>
-                </td>
+            {filteredEmails.length > 0 ? (
+              filteredEmails.map((email) => (
+                <tr
+                  key={email.id}
+                  className={`hover:bg-slate-50/80 transition-colors group ${
+                    !email.isRead ? "bg-white" : "bg-slate-50/30"
+                  }`}
+                >
+                  {/* Contact Column */}
+                  <td className="px-6 py-5 align-middle">
+                    <div className="flex items-center gap-2">
+                      {/* Unread Indicator Dot */}
+                      {!email.isRead && (
+                        <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+                      )}
+                      <div>
+                        <div
+                          className={`text-sm text-slate-700 ${
+                            !email.isRead ? "font-bold" : "font-medium"
+                          }`}
+                        >
+                          {email.contactName}
+                        </div>
+                        <div className="text-xs text-slate-500 mt-1 font-medium">
+                          {email.contactCompany}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
 
-                {/* Subject Column - Changed align-top to align-middle */}
-                <td className="px-6 py-5 align-middle">
-                  <div className="font-semibold text-slate-700 text-sm mb-1">
-                    {email.subject}
-                  </div>
-                  <p className="text-xs text-slate-500 leading-relaxed pr-4">
-                    {email.snippet}
-                  </p>
-                </td>
+                  {/* Subject Column */}
+                  <td className="px-6 py-5 align-middle">
+                    <div
+                      className={`text-sm text-slate-700 mb-1 ${
+                        !email.isRead ? "font-bold" : "font-medium"
+                      }`}
+                    >
+                      {email.subject}
+                    </div>
+                    <p className="text-xs text-slate-500 leading-relaxed pr-4 line-clamp-1">
+                      {email.snippet}
+                    </p>
+                  </td>
 
-                {/* Classification Column - Changed align-top to align-middle */}
-                <td className="px-6 py-5 align-middle">
-                  <Badge type={email.classification} />
-                  <div className="text-[11px] text-slate-500 mt-2 font-medium">
-                    {email.subClassification}
-                  </div>
-                </td>
+                  {/* Classification Column */}
+                  <td className="px-6 py-5 align-middle">
+                    <Badge type={email.classification} />
+                    <div className="text-[11px] text-slate-500 mt-2 font-medium">
+                      {email.subClassification}
+                    </div>
+                  </td>
 
-                {/* Time Column - Changed align-top to align-middle */}
-                <td className="px-6 py-5 align-middle text-xs text-slate-500 font-medium">
-                  {email.time}
-                </td>
+                  {/* Time Column */}
+                  <td className="px-6 py-5 align-middle text-xs text-slate-500 font-medium">
+                    {email.time}
+                  </td>
 
-                {/* Actions Column - Changed align-top to align-middle */}
-                <td className="px-6 py-5 align-middle">
-                  <div className="flex items-center gap-2">
-                    <button className="px-4 py-1.5 bg-white border border-slate-200 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm">
-                      Read
-                    </button>
-                    <button className="px-4 py-1.5 bg-white border border-slate-200 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm">
-                      Override
-                    </button>
-                  </div>
+                  {/* Actions Column */}
+                  <td className="px-6 py-5 align-middle">
+                    <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button className="px-4 py-1.5 bg-white border border-slate-200 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm">
+                        Read
+                      </button>
+                      <button className="px-4 py-1.5 bg-white border border-slate-200 rounded-full text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm">
+                        Override
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              // Empty State
+              <tr>
+                <td colSpan={5} className="px-6 py-12 text-center">
+                  <p className="text-slate-500 text-sm">No emails found.</p>
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
