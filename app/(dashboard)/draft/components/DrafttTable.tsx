@@ -73,7 +73,13 @@ const MOCK_EMAILS: EmailItem[] = [
   },
 ];
 
-function EmailCard({ data }: { data: EmailItem }) {
+function EmailCard({
+  data,
+  setIsGenerateModalOpen,
+}: {
+  data: EmailItem;
+  setIsGenerateModalOpen: (isOpen: boolean) => void;
+}) {
   return (
     <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow flex flex-col h-full">
       {/* Header: Avatar, Name, Email */}
@@ -134,7 +140,10 @@ function EmailCard({ data }: { data: EmailItem }) {
           {data.status === "Ready" ? "Ready" : "Review"}
         </span>
 
-        <button className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 transition-colors">
+        <button
+          className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 transition-colors"
+          onClick={() => setIsGenerateModalOpen(true)}
+        >
           <Eye size={14} />
           View
         </button>
@@ -146,10 +155,12 @@ function EmailCard({ data }: { data: EmailItem }) {
 interface InboxGridProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  setIsGenerateModalOpen: (isOpen: boolean) => void;
 }
 export default function DraftTable({
   activeTab,
   setActiveTab,
+  setIsGenerateModalOpen,
 }: InboxGridProps) {
   // Local state for search
   const [searchQuery, setSearchQuery] = useState("");
@@ -232,7 +243,11 @@ export default function DraftTable({
         {filteredEmails.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 p-8">
             {filteredEmails.map((email) => (
-              <EmailCard key={email.id} data={email} />
+              <EmailCard
+                key={email.id}
+                data={email}
+                setIsGenerateModalOpen={setIsGenerateModalOpen}
+              />
             ))}
           </div>
         ) : (

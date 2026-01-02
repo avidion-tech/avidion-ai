@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Sidebar from "@/app/main/Sidebar"; // Keep your existing import path
+import Sidebar from "@/app/components/Sidebar"; // Keep your existing import path
 import { Menu } from "lucide-react";
 
 export default function DashboardShell({

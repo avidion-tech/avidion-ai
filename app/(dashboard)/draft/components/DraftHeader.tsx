@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Filter, Menu } from "lucide-react";
 import { GoBellFill } from "react-icons/go";
 // import { AdvancedFiltersModal } from "./AdvancedFiltersModal";
 import { IoMdRefresh } from "react-icons/io";
+import { GenerateMoreModal } from "./GenerateMoreModal";
 
 interface HeaderProps {
   onMenuClick: () => void;
 }
 
 export default function DraftHeader({ onMenuClick }: HeaderProps) {
-  //   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   return (
     <>
@@ -50,7 +51,7 @@ export default function DraftHeader({ onMenuClick }: HeaderProps) {
             Refresh
           </button>
           <button
-            // onClick={() => setIsFilterModalOpen(true)}
+            onClick={() => setIsFilterModalOpen(true)}
             className="flex-1 md:flex-none px-6 py-2.5 md:px-6 md:py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-full text-sm md:text-base font-medium hover:from-blue-600 hover:to-blue-600 shadow-sm transition-all duration-200 flex items-center justify-center gap-2 whitespace-nowrap"
           >
             <Filter size={18} className="text-white/90" />
@@ -58,10 +59,10 @@ export default function DraftHeader({ onMenuClick }: HeaderProps) {
           </button>
         </div>
       </div>
-      {/* <AdvancedFiltersModal
+      <GenerateMoreModal
         open={isFilterModalOpen}
         onOpenChange={setIsFilterModalOpen}
-      /> */}
+      />
     </>
   );
 }
