@@ -93,42 +93,42 @@ const StatusBadge = ({ status }: { status: CampaignStatus }) => {
 
 export default function CampaignTable() {
   return (
-    <div className="w-full bg-white rounded-[32px] shadow-sm border border-gray-100 overflow-hidden">
+    <div className="w-full bg-slate-50 rounded-[32px] shadow-sm border border-gray-100 overflow-hidden">
       {/* Wrapper for horizontal scroll on mobile */}
       <div className="overflow-x-auto">
         <table className="w-full min-w-[1000px]">
           <thead>
-            <tr className="border-b border-gray-100">
-              <th className="text-left py-5 px-6 text-sm font-semibold text-gray-800">
+            <tr className="border-b-2 border-gray-200">
+              <th className="text-left py-6 px-6 text-lg font-semibold text-gray-800">
                 Campaign Name
               </th>
-              <th className="text-left py-5 px-6 text-sm font-semibold text-gray-800">
+              <th className="text-left py-6 px-6 text-lg font-semibold text-gray-800">
                 Playbook
               </th>
-              <th className="text-left py-5 px-6 text-sm font-semibold text-gray-800">
+              <th className="text-left py-6 px-6 text-lg font-semibold text-gray-800">
                 Leads
               </th>
-              <th className="text-left py-5 px-6 text-sm font-semibold text-gray-800">
+              <th className="text-left py-6 px-6 text-lg font-semibold text-gray-800">
                 Status
               </th>
-              <th className="text-left py-5 px-6 text-sm font-semibold text-gray-800">
+              <th className="text-left py-6 px-6 text-lg font-semibold text-gray-800">
                 Sent
               </th>
-              <th className="text-left py-5 px-6 text-sm font-semibold text-gray-800">
+              <th className="text-left py-6 px-6 text-lg font-semibold text-gray-800">
                 Replies
               </th>
-              <th className="text-left py-5 px-6 text-sm font-semibold text-gray-800">
+              <th className="text-left py-6 px-6 text-lg font-semibold text-gray-800">
                 Meetings
               </th>
-              <th className="text-left py-5 px-6 text-sm font-semibold text-gray-800">
+              <th className="text-left py-6 px-6 text-lg font-semibold text-gray-800">
                 Start Date
               </th>
-              <th className="text-center py-5 px-6 text-sm font-semibold text-gray-800">
+              <th className="text-left py-6 px-6 text-lg font-semibold text-gray-800">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
+          <tbody className="divide-y-2 divide-gray-200">
             {campaigns.map((campaign) => (
               <tr
                 key={campaign.id}
@@ -140,7 +140,7 @@ export default function CampaignTable() {
                     <span className="text-gray-900 font-medium text-sm">
                       {campaign.name}
                     </span>
-                    <span className="text-gray-400 text-xs mt-0.5">
+                    <span className="text-gray-500 text-sm mt-0.5">
                       {campaign.replyRate}
                     </span>
                   </div>
@@ -179,8 +179,8 @@ export default function CampaignTable() {
                 </td>
 
                 {/* Start Date (Formatted with line breaks) */}
-                <td className="py-5 px-6 align-middle text-sm text-gray-600 whitespace-pre-line leading-tight">
-                  {campaign.startDate.replace(/-/g, "-\n")}
+                <td className="py-5 px-6 align-middle text-sm text-gray-600">
+                  {campaign.startDate}
                 </td>
 
                 {/* Actions */}

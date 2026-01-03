@@ -13,11 +13,7 @@ import { IoMdRefresh } from "react-icons/io";
 import { Filter } from "lucide-react";
 import { GenerateMoreModal } from "./components/GenerateMoreModal";
 
-export default function InboxPage({
-  onMenuClick,
-}: {
-  onMenuClick: () => void;
-}) {
+export default function Page({ onMenuClick }: { onMenuClick: () => void }) {
   // State for the tabs (All, Unread, etc.)
   // We lift this state up here so we can filter data in the future if needed
   const [activeTab, setActiveTab] = useState("All (8)");

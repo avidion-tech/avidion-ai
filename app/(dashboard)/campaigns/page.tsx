@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import AIBanner from "./components/AIBanner";
 import Header from "@/app/components/Header";
 import { Plus } from "lucide-react";
@@ -6,8 +8,11 @@ import { FaPause } from "react-icons/fa6";
 import CampaignStats from "./components/CampaignStats";
 import CampaignSearchBar from "./components/SearchBar";
 import CampaignTable from "./components/CampaignTable";
+import CampaignInsightsCard from "./components/CampaignInsightsCard";
+import { NewCampaignModal } from "./components/NewCampaignModal";
 
-const page = ({ onMenuClick }: { onMenuClick: () => void }) => {
+const Page = ({ onMenuClick }: { onMenuClick: () => void }) => {
+  const [isNewCampaignModalOpen, setIsNewCampaignModalOpen] = useState(false);
   return (
     <>
       <div className="space-y-6">
@@ -24,7 +29,7 @@ const page = ({ onMenuClick }: { onMenuClick: () => void }) => {
           </button>
 
           <button
-            // onClick={() => setIsGenerateModalOpen(true)}
+            onClick={() => setIsNewCampaignModalOpen(true)}
             className="flex-1 md:flex-none px-6 py-2.5 md:px-6 md:py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-full text-sm md:text-base font-medium hover:from-blue-600 hover:to-blue-600 shadow-sm transition-all duration-200 flex items-center justify-center gap-2 whitespace-nowrap"
           >
             <Plus size={18} className="text-white/90" />
@@ -34,9 +39,14 @@ const page = ({ onMenuClick }: { onMenuClick: () => void }) => {
         <CampaignStats />
         <CampaignSearchBar />
         <CampaignTable />
+        <CampaignInsightsCard />
       </div>
+      <NewCampaignModal
+        open={isNewCampaignModalOpen}
+        onOpenChange={setIsNewCampaignModalOpen}
+      />
     </>
   );
 };
 
-export default page;
+export default Page;
