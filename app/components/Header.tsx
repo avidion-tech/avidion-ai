@@ -32,7 +32,7 @@ export default function Header({
 
           {/* Title & Description */}
           <div>
-            <h1 className="text-xl md:text-3xl font-bold text-gray-900 flex items-center gap-2">
+            <h1 className="text-xl md:text-3xl font-semibold text-gray-900 flex items-center gap-2">
               {title}
             </h1>
             <p className="text-xs md:text-lg text-gray-500 mt-1">
