@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
@@ -6,8 +8,18 @@ import HeaderActions from "../components/playbookdetailsComponents/header-action
 import NavigationBanner from "../components/playbookdetailsComponents/navigation-banner";
 import ToneSettingsCard from "../components/playbookdetailsComponents/tone-settings-card";
 import VocabularyControlCard from "../components/playbookdetailsComponents/vocabulary-control-card";
+import StyleRulesSection from "../components/playbookdetailsComponents/style-rules-section";
+import TestExampleSection from "../components/playbookdetailsComponents/test-example-section";
+import ActiveTemplateSection from "../components/playbookdetailsComponents/active-template";
+import AllTemplatesSection from "../components/playbookdetailsComponents/all-templates-section";
+import CreateNewTemplateModal from "../components/playbookdetailsComponents/CreateNewTemplateModal";
+// import TargetPersonasSection from "../components/playbookdetailsComponents/TargetPersonasSection";
+// import CompanyProfileSection from "../components/playbookdetailsComponents/CompanyProfileSection";
 
 export default function PlaybookEditorPage() {
+  const [activeTab, setActiveTab] = useState("Voice & Tone");
+  const [isOpenNewTemplateModal, setIsOpenNewTemplateModal] = useState(false);
+
   return (
     <>
       <div className="space-y-6">
@@ -38,10 +50,54 @@ export default function PlaybookEditorPage() {
             Last updated: Nov 5, 2025 by Admin User
           </p>
         </div>
-        <NavigationBanner />
-        <ToneSettingsCard />
-        <VocabularyControlCard />
+        <NavigationBanner activeTab={activeTab} onTabChange={setActiveTab} />
+        {activeTab === "Voice & Tone" && (
+          <>
+            <ToneSettingsCard />
+            <VocabularyControlCard />
+            <StyleRulesSection />
+            <TestExampleSection />
+          </>
+        )}
+        {activeTab === "Templates" && (
+          <>
+            <ActiveTemplateSection />
+            <AllTemplatesSection
+              setIsOpenNewTemplateModal={setIsOpenNewTemplateModal}
+            />
+          </>
+        )}
+
+        {activeTab === "ICP" && (
+          <>
+            <div className="p-10 text-center text-gray-500">
+              ICP Settings Content
+            </div>
+            {/* <TargetPersonasSection />
+            <CompanyProfileSection /> */}
+          </>
+        )}
+
+        {activeTab === "Learning" && (
+          <>
+            <div className="p-10 text-center text-gray-500">
+              Learning Content
+            </div>
+          </>
+        )}
+
+        {activeTab === "Versions" && (
+          <>
+            <div className="p-10 text-center text-gray-500">
+              Version History
+            </div>
+          </>
+        )}
       </div>
+      <CreateNewTemplateModal
+        open={isOpenNewTemplateModal}
+        onOpenChange={setIsOpenNewTemplateModal}
+      />
     </>
   );
 }

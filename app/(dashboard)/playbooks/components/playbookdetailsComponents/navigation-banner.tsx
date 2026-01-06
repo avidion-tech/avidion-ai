@@ -1,13 +1,21 @@
 import React from "react";
 import { FaBrain, FaClock, FaFile, FaMessage, FaUsers } from "react-icons/fa6";
 
-export default function NavigationBanner() {
+interface NavigationBannerProps {
+  activeTab: string;
+  onTabChange: (tab: string) => void;
+}
+
+export default function NavigationBanner({
+  activeTab,
+  onTabChange,
+}: NavigationBannerProps) {
   const navItems = [
-    { icon: FaMessage, label: "Voice & Tone", active: true },
-    { icon: FaFile, label: "Templates", active: false },
-    { icon: FaUsers, label: "ICP", active: false },
-    { icon: FaBrain, label: "Learning", active: false },
-    { icon: FaClock, label: "Versions", active: false },
+    { icon: FaMessage, label: "Voice & Tone" },
+    { icon: FaFile, label: "Templates" },
+    { icon: FaUsers, label: "ICP" },
+    { icon: FaBrain, label: "Learning" },
+    { icon: FaClock, label: "Versions" },
   ];
 
   return (
@@ -17,8 +25,9 @@ export default function NavigationBanner() {
         {navItems.map((item, index) => (
           <button
             key={index}
+            onClick={() => onTabChange(item.label)}
             className={`flex items-center gap-3 px-5 py-2 rounded-full transition-all duration-200 font-medium text-[15px] whitespace-nowrap ${
-              item.active
+              activeTab === item.label
                 ? "bg-slate-50 text-[#3B82F6] shadow-sm" // Active: White bg, Blue text
                 : "text-white hover:bg-white/10" // Inactive: White text, subtle hover
             }`}
